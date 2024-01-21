@@ -1,7 +1,8 @@
 -- init.sql
 CREATE TABLE IF NOT EXISTS db_batch.public.my_user
 (
-    user_id   integer primary key,
+    id SERIAL PRIMARY KEY,
+    user_id   integer ,
     price     integer,
-    timestamp timestamp
+    timestamp date
 );
