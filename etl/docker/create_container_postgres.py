@@ -2,7 +2,10 @@ import subprocess
 
 
 def run_docker_compose():
-    # Comando para ejecutar Docker Compose
+    """
+    1. Primer paso
+    Función encargada de ejecutar comando para ejecutar Docker Compose
+    """
     command = ["docker-compose", "up", "-d"]
 
     # Ejecutar el comando
