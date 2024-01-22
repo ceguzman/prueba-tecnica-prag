@@ -70,10 +70,15 @@ def write_data(dfs):
     sumatoria = 0
 
     for batch_name, df_batch in dfs.items():
-        df_batch.write.jdbc(url=postgres_url, table="my_user", mode="append", properties=properties)
+        if batch_name == 'validation':
+            df_batch.write.jdbc(url=postgres_url, table="my_user_validation", mode="append", properties=properties)
+
+        else:
+            df_batch.write.jdbc(url=postgres_url, table="my_user", mode="append", properties=properties)
 
         count_df = df_batch.count()
-        sumatoria += count_df
+        if batch_name != 'validation':
+            sumatoria += count_df
         statistics = df_batch.agg(
             lit(batch_name).alias('nombre_lote_batch'),
             lit(count_df).alias('conteo_registros'),
@@ -87,10 +92,8 @@ def write_data(dfs):
 
 if __name__ == "__main__":
     # 1. paso
-    dfs_batch = dynamic_read_batch(['2012-1', '2012-2', '2012-3', '2012-4', '2012-5'])
-    # dfs_batch = dynamic_read_batch(['validation'])
+    dfs_batch = dynamic_read_batch(['2012-1', '2012-2', '2012-3', '2012-4', '2012-5', 'validation'])
     # 2. paso
     dfs_transformations = transformations(dfs_batch)
-
     # 3. paso
     write_data(dfs_transformations)
